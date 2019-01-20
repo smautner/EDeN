@@ -112,7 +112,7 @@ setup(
         "joblib",
         "matplotlib",
         "mpld3",
-        "networkx <= 1.10",
+        "networkx == 2.2", # was <1.10 but that is incorrect 
         "nose",
         "numpy >= 1.8.0",
         #"openbabel",
