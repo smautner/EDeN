@@ -18,7 +18,7 @@ from eden.util import serialize_dict
 from itertools import tee
 import logging
 logger = logging.getLogger(__name__)
-
+from multiprocessing import Pool 
 
 def auto_label(graphs, n_clusters=16, **opts):
     """Label nodes with cluster id.
@@ -61,10 +61,16 @@ def vectorize(graphs, **opts):
     return Vectorizer(**opts).transform(graphs)
 
 
+def noname(x):
+    x,y = x
+    return y.vertex_transform([x])[0]
+
 def vertex_vectorize(graphs, **opts):
     """Transform a list of networkx graphs into a list of sparse matrices."""
-    return Vectorizer(**opts).vertex_transform(graphs)
-
+    poo = Pool(processes=8)
+    res = poo.map(noname, [(g,Vectorizer()) for g in graphs])
+    poo.close()
+    return res
 
 def annotate(graphs,
              estimator=None,
